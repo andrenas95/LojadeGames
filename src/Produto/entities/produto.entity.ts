@@ -38,6 +38,7 @@ export class Produto{
      // Validação para espaços em branco
      @Transform(({ value }: TransformFnParams) => value?.trim())
      @IsNotEmpty()
+     @Column({nullable: false})
      preco: number;     
  
 
