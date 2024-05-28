@@ -1,50 +1,41 @@
-﻿import { Transform, TransformFnParams } from "class-transformer";
+﻿import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
-import { Categoria } from "src/Categoria/entities/categoria.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Categoria } from "../../Categoria/entities/categoria.entity";
+import { Usuario } from "../../usuario/entities/usuario.entity";
 
 
-@Entity({name: "tb_produto"})
-export class Produto{
+@Entity({name: "tb_produtos"})
+export class Produto {
 
-    @PrimaryGeneratedColumn() // Chave Primária e Auto_Increment
-    id: number;
+    @ApiProperty()  
+    @PrimaryGeneratedColumn()    
+    id: number
 
-    // Validação para espaços em branco
-    @Transform(({ value }: TransformFnParams) => value?.trim()) 
+    @ApiProperty()  
     @IsNotEmpty()
     @Column({length: 100, nullable: false})
-    titulo: string;
+    titulo: string
 
-    // Validação para espaços em branco
-    @Transform(({ value }: TransformFnParams) => value?.trim())
+    @ApiProperty()  
     @IsNotEmpty()
     @Column({length: 1000, nullable: false})
-    genero: string;
+    texto: string
 
-     // Validação para espaços em branco
-     @Transform(({ value }: TransformFnParams) => value?.trim())
-     @IsNotEmpty()
-     @Column({length: 1000, nullable: false})
-     texto: string;
-
-     // Validação para espaços em branco
-
-     @Transform(({ value }: TransformFnParams) => value?.trim())
-     @IsNotEmpty()
-     @Column({length: 1000, nullable: false})
-     foto: string;     
-
-     // Validação para espaços em branco
-     @Transform(({ value }: TransformFnParams) => value?.trim())
-     @IsNotEmpty()
-     @Column({nullable: false})
-     preco: number;     
- 
-
-     @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
+    @ApiProperty()  
+    @UpdateDateColumn()
+    data: Date
+    
+    @ApiProperty({ type: () => Categoria })  
+    @ManyToOne(() => Categoria, (categoria) => categoria.produto, {
         onDelete: "CASCADE"
     })
-    categoria: Categoria
-}
+    Categoria: Categoria
 
+    @ApiProperty({ type: () => Usuario })  
+    @ManyToOne(() => Usuario, (usuario) => usuario.produto, {
+        onDelete: "CASCADE"
+    })
+    usuario: Usuario
+
+}

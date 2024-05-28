@@ -4,7 +4,7 @@ import { Produto } from "../entities/produto.entity";
 import { DeleteResult, ILike, Repository } from "typeorm";
 
 @Injectable()
-export class ProdutoService{
+export class produtoService{
     constructor(
         @InjectRepository(Produto)
         private produtoRepository: Repository<Produto>
@@ -13,7 +13,7 @@ export class ProdutoService{
     async findAll(): Promise<Produto[]>{
         return await this.produtoRepository.find();
 
-        // SELECT * FROM tb_postagens;
+        // SELECT * FROM tb_produtos;
     }
 
     async findById(id: number): Promise<Produto> {
@@ -24,14 +24,14 @@ export class ProdutoService{
             }
         });
 
-        // Checar se a postagem não foi encontrada
+        // Checar se a Produto não foi encontrada
         if (!produto)
             throw new HttpException('Produto não encontrado!', HttpStatus.NOT_FOUND);
 
-        // Retornar a postagem, caso ela exista
+        // Retornar a Produto, caso ela exista
         return produto;
 
-        // SELECT * FROM tb_postagens WHERE id = ?;
+        // SELECT * FROM tb_produtos WHERE id = ?;
     }
 
     async findByTitulo(titulo: string): Promise<Produto[]> {
@@ -41,13 +41,13 @@ export class ProdutoService{
             }
         })
 
-        // SELECT * FROM tb_postagens WHERE titulo LIKE '%titulo%';
+        // SELECT * FROM tb_produtos WHERE titulo LIKE '%titulo%';
     }
 
     async create(produto: Produto): Promise<Produto>{
         return await this.produtoRepository.save(produto);
 
-         // INSERT INTO tb_postagens (titulo, texto, data) VALUES (?, ?, server);
+         // INSERT INTO tb_produtos (titulo, texto, data) VALUES (?, ?, server);
     }
 
     async update(produto: Produto): Promise<Produto>{
@@ -59,7 +59,7 @@ export class ProdutoService{
 
         return await this.produtoRepository.save(produto);
 
-         // UPDATE tb_postagens SET titulo = ?, texto = ?, data = server WHERE id = ?;
+         // UPDATE tb_produtos SET titulo = ?, texto = ?, data = server WHERE id = ?;
 
     }
 

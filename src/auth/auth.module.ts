@@ -5,9 +5,10 @@ import { UsuarioModule } from '../usuario/usuario.module';
 import { Bcrypt } from './bcrypt/bcrypt';
 import { jwtConstants } from './constants/constants';
 import { AuthController } from './controllers/auth.controller';
-import { AuthService } from './services/auth.services';
+
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { LocalStrategy } from './strategy/local.strategy';
+import { AuthService } from './services/auth.services';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { LocalStrategy } from './strategy/local.strategy';
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '24h' },
     }),
   ],
   providers: [Bcrypt, AuthService, LocalStrategy, JwtStrategy],

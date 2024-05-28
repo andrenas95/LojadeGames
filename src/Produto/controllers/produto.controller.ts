@@ -1,46 +1,51 @@
-﻿import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+﻿import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 import { Produto } from "../entities/produto.entity";
-import { ProdutoService } from "../services/produto.services";
+import { produtoService } from "../services/produto.services";
 
+
+@ApiTags('Produto')
+@UseGuards(JwtAuthGuard)
 @Controller("/produtos")
-export class ProdutoController{
+@ApiBearerAuth()
+export class ProdutoController {
+  constructor(private readonly produtoService: produtoService) { }
 
-    constructor(private readonly produtoService: ProdutoService) {}
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  findAll(): Promise<Produto[]> {
+    return this.produtoService.findAll();
+  }
 
-    @Get()
-    @HttpCode(HttpStatus.OK) // HTTP Status 200
-    findAll(): Promise<Produto[]>{
-        return this.produtoService.findAll();
-    }
+  @Get('/:id')
+  @HttpCode(HttpStatus.OK)
+  findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
+    return this.produtoService.findById(id);
+  }
 
-    @Get('/:id')
-    @HttpCode(HttpStatus.OK) // HTTP Status 200
-    findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
-        return this.produtoService.findById(id);
-    }
+  @Get('/titulo/:titulo')
+  @HttpCode(HttpStatus.OK)
+  findByTitulo(@Param('titulo') titulo: string): Promise<Produto[]> {
+    return this.produtoService.findByTitulo(titulo);
+  }
 
-    @Get('/titulo/:titulo')
-    @HttpCode(HttpStatus.OK) // HTTP Status 200
-    findByTitulo(@Param('titulo') titulo: string): Promise<Produto[]> {
-        return this.produtoService.findByTitulo(titulo);
-    }
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() Produto: Produto): Promise<Produto> {
+    return this.produtoService.create(Produto);
+  }
 
-    @Post() 
-    @HttpCode(HttpStatus.CREATED)
-    create(@Body() produto: Produto): Promise<Produto> {
-        return this.produtoService.create(produto);
-    }
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  update(@Body() Produto: Produto): Promise<Produto> {
+    return this.produtoService.update(Produto);
+  }
 
-    @Put() 
-    @HttpCode(HttpStatus.OK)
-    update(@Body() produto: Produto): Promise<Produto> {
-        return this.produtoService.update(produto);
-    }
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id', ParseIntPipe) id: number){
+    return this.produtoService.delete(id);
+  }
 
-    @Delete('/:id')
-    @HttpCode(HttpStatus.NO_CONTENT) // HTTP Status 204
-    delete(@Param('id', ParseIntPipe) id: number){
-        return this.produtoService.delete(id);
-    }
-    
 }
